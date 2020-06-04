@@ -19,4 +19,9 @@ import java.awt.Dimension
 /**
  * イメージフレームのデフォルトサイズ
  */
-val DEFAULT_IMG_FRAME_SIZE = Dimension(800, 800)
+val DEFAULT_IMG_FRAME_SIZE = Dimension(640, 640)
+
+/**
+ * スライドショーのデフォルト時間間隔
+ */
+const val DEFAULT_TIME_INTERVAL = 2500L

@@ -15,6 +15,7 @@
 package com.sigmay.slideshow.app
 
 import com.sigmay.slideshow.common.ApplicationException
+import com.sigmay.slideshow.common.DEFAULT_TIME_INTERVAL
 import com.sigmay.slideshow.common.ImageReadingFailureException
 import com.sigmay.slideshow.frame.ImageFrame
 import java.io.File
@@ -47,6 +48,7 @@ class SlideShowApp {
                     exitProcess(0)
                 rootDir = fc.selectedFile
             }
+
             println("[Root Dir]: ${rootDir.canonicalPath}")
             println()
         }
@@ -61,6 +63,7 @@ class SlideShowApp {
             val frame = ImageFrame("SlideShow")
             var loopCount = 1
 
+            // 1回目は画像以外も含まれている
             println("==== Loop $loopCount ====")
             fileList.shuffle()
             val nonImageList = mutableListOf<File>()
@@ -73,21 +76,22 @@ class SlideShowApp {
                     err.println("[Warning]: ${file.canonicalPath} is not image")
                     nonImageList.add(file)
                 }
+            println()
 
+            // 画像以外をリストから削除（全部なくなったら例外）
             fileList.removeAll(nonImageList)
             if (fileList.isEmpty())
                 throw ApplicationException("ファイルが存在しません。")
 
-            loopCount++
-            println()
-
+            // 2回目以降は画像のみ
             while (true) {
+                loopCount++
                 println("==== Loop $loopCount ====")
                 fileList.shuffle()
                 for (file in fileList) {
                     frame.changeImage(file.absolutePath)
                     println("[Image File]: ${file.canonicalPath}")
-                    Thread.sleep(3000)
+                    Thread.sleep(DEFAULT_TIME_INTERVAL)
                 }
                 loopCount++
                 println()
@@ -99,7 +103,7 @@ class SlideShowApp {
          *
          * @param rootDirPath 実行ディレクトリのパス（存在しない場合GUIで入力）
          */
-        public fun execute(rootDirPath: String = "") {
+        fun execute(rootDirPath: String = "") {
             setRootDir(rootDirPath)
             start()
         }

@@ -40,8 +40,12 @@ internal class ImageCanvas(private var img: Image) : JPanel() {
     override fun paintComponent(g: Graphics?) {
         if (g == null)
             throw ImageReadingFailureException("画像の読み込みが失敗しました。")
+
+        // キャンバスを黒で初期化
         g.color = Color.BLACK
         g.fillRect(0, 0, width, height)
+
+        // サイズを計算
         val w: Int
         val h: Int
         if (img.getWidth(this) /width.toDouble() > img.getHeight(this)/height.toDouble()) {
@@ -51,6 +55,8 @@ internal class ImageCanvas(private var img: Image) : JPanel() {
             h = height
             w = (img.getWidth(this) * height / img.getHeight(this).toDouble()).toInt()
         }
+
+        // サイズをもとに画像左上の座標を計算
         val x = (width - w) / 2
         val y = (height - h) / 2
         g.drawImage(img, x, y, w, h, this)
